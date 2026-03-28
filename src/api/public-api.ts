@@ -66,6 +66,15 @@ export interface LineToolExport<T extends LineToolType> {
 // #region Event Structures
 
 /**
+ * Defines the structured data payload passed to listeners when a line tool is selected or deselected.
+ *
+ * @property selectedLineTool - The full {@link LineToolExport} data of the tool that was selected, or `null` if all tools were deselected.
+ */
+export interface LineToolsSelectEventParams {
+	selectedLineTool: LineToolExport<LineToolType> | null;
+}
+
+/**
  * Defines the structured data payload passed to listeners when a double-click event occurs on a line tool.
  *
  * This structure is kept identical to the original V3.8 event output for drop-in compatibility.
@@ -91,6 +100,13 @@ export interface LineToolsAfterEditEventParams {
 	selectedLineTool: LineToolExport<LineToolType>;
 	stage: 'lineToolEdited' | 'pathFinished' | 'lineToolFinished';
 }
+
+/**
+ * The function signature required for handlers subscribing to the select event.
+ *
+ * @param param - The event data containing the details of the selected tool, or null if deselected.
+ */
+export type LineToolsSelectEventHandler = (param: LineToolsSelectEventParams) => void;
 
 /**
  * The function signature required for handlers subscribing to the double-click event.
@@ -297,6 +313,22 @@ export interface ILineToolsApi {
 	 * @returns void
 	 */
 	unsubscribeLineToolsAfterEdit(handler: LineToolsAfterEditEventHandler): void;
+	
+	/**
+	 * Subscribes a handler function to the event that fires when a line tool is selected or deselected.
+	 *
+	 * @param handler - The callback function to execute. It receives a {@link LineToolsSelectEventParams} object.
+	 * @returns void
+	 */
+	subscribeLineToolsSelect(handler: LineToolsSelectEventHandler): void;
+
+	/**
+	 * Unsubscribes a handler function from the select event.
+	 *
+	 * @param handler - The previously subscribed handler function.
+	 * @returns void
+	 */
+	unsubscribeLineToolsSelect(handler: LineToolsSelectEventHandler): void;
 	
 	/**
 	 * Programmatically positions the chart's crosshair at a specific screen pixel coordinate.

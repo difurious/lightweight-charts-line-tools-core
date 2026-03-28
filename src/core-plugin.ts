@@ -8,7 +8,9 @@ import {
 	LineToolsAfterEditEventHandler,
 	LineToolsDoubleClickEventHandler,
 	LineToolsDoubleClickEventParams,
-	LineToolsAfterEditEventParams
+	LineToolsAfterEditEventParams,
+	LineToolsSelectEventHandler,
+	LineToolsSelectEventParams
 } from './api/public-api';
 import { Delegate } from './utils/helpers';
 import { LineToolPartialOptionsMap, LineToolType, IChartWidgetBase } from './types';
@@ -43,6 +45,7 @@ export class LineToolsCorePlugin<HorzScaleItem> implements ILineToolsApi {
 	// Delegates for broadcasting V3.8-compatible events
 	private readonly _doubleClickDelegate = new Delegate<LineToolsDoubleClickEventParams>();
 	private readonly _afterEditDelegate = new Delegate<LineToolsAfterEditEventParams>();
+	private readonly _selectDelegate = new Delegate<LineToolsSelectEventParams>();
 
 	// Throttled Stacking Update
 	private _stackingUpdateScheduled: boolean = false;
@@ -469,6 +472,28 @@ export class LineToolsCorePlugin<HorzScaleItem> implements ILineToolsApi {
 		this._afterEditDelegate.unsubscribe(handler);
 	}
 
+	/**
+	 * Subscribes a callback function to the "Select" event.
+	 *
+	 * This event fires whenever a line tool is selected or deselected.
+	 *
+	 * @param handler - The function to execute when the event fires. Receives {@link LineToolsSelectEventParams}.
+	 * @returns void
+	 */
+	public subscribeLineToolsSelect(handler: LineToolsSelectEventHandler): void {
+		this._selectDelegate.subscribe(handler);
+	}
+
+	/**
+	 * Unsubscribes a previously registered callback from the "Select" event.
+	 *
+	 * @param handler - The specific callback function that was passed to {@link subscribeLineToolsSelect}.
+	 * @returns void
+	 */
+	public unsubscribeLineToolsSelect(handler: LineToolsSelectEventHandler): void {
+		this._selectDelegate.unsubscribe(handler);
+	}
+
 
 
 	/**
@@ -545,6 +570,23 @@ export class LineToolsCorePlugin<HorzScaleItem> implements ILineToolsApi {
 			selectedLineTool: tool.getExportData(),
 		};
 		this._doubleClickDelegate.fire(eventParams);
+	}
+
+	/**
+	 * Broadcasts an event indicating that a line tool has been selected or deselected.
+	 *
+	 * This method is called internally by the {@link InteractionManager} when selection state changes.
+	 *
+	 * @internal
+	 * @param tool - The tool instance that was selected, or null if tools were deselected.
+	 * @returns void
+	 */
+	public fireSelectEvent(tool: BaseLineTool<HorzScaleItem> | null): void {
+		console.log(`[CorePlugin] Firing Select event for tool: ${tool ? tool.id() : 'none (deselected)'}`);
+		const eventParams: LineToolsSelectEventParams = {
+			selectedLineTool: tool ? tool.getExportData() : null,
+		};
+		this._selectDelegate.fire(eventParams);
 	}
 
 	/**

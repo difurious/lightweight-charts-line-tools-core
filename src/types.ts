@@ -566,7 +566,7 @@ export interface LineToolPathOptions { line: Omit<LineOptions, 'cap' | 'extend' 
  * Specific options for the Fibonacci Retracement tool.
  * Configures the trend line, the retracement levels (coefficients/colors), and optional trading strategy displays.
  */
-export interface LineToolFibRetracementOptions { line: Omit<LineOptions, 'extend' | 'join' | 'color' | 'cap' | 'end'>; extend: ExtendOptions; levels: FibRetracementLevel[]; tradeStrategy: FibRetracementTradeStrategy; }
+export interface LineToolFibRetracementOptions { line: Omit<LineOptions, 'extend' | 'join' | 'color' | 'cap' | 'end'>; extend: ExtendOptions; levels: FibRetracementLevel[]; tradeStrategy: FibRetracementTradeStrategy; fixedWidth?: number; }
 
 /**
  * Specific options for the Parallel Channel tool.

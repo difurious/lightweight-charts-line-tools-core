@@ -234,6 +234,7 @@ export class InteractionManager<HorzScaleItem> {
 		}
 		if (this._selectedTool === tool) {
 			this._selectedTool = null;
+			this._plugin.fireSelectEvent(null);
 		}
 		if (this._hoveredTool === tool) {
 			this._hoveredTool = null;
@@ -279,6 +280,7 @@ export class InteractionManager<HorzScaleItem> {
 		this.deselectAllTools();
 		this._selectedTool = tool;
 		this._selectedTool.setSelected(true);
+		this._plugin.fireSelectEvent(this._selectedTool);
 
 		// --- NEW FIX: Call normalize() if implemented by the tool ---
 		const toolWithNormalize = tool as BaseLineTool<HorzScaleItem> & { normalize?: () => void };
@@ -346,6 +348,7 @@ export class InteractionManager<HorzScaleItem> {
 				this.deselectAllTools();
 				this._selectedTool = hitResult.tool;
 				this._selectedTool.setSelected(true);
+				this._plugin.fireSelectEvent(this._selectedTool);
 			}
 
 			this._draggedTool = hitResult.tool;
@@ -1067,6 +1070,7 @@ export class InteractionManager<HorzScaleItem> {
 			this.deselectAllTools();
 			this._selectedTool = clickedTool;
 			this._selectedTool.setSelected(true);
+			this._plugin.fireSelectEvent(this._selectedTool);
 		} else {
 			this.deselectAllTools();
 		}
@@ -1275,6 +1279,7 @@ export class InteractionManager<HorzScaleItem> {
 			//console.log('inside selectedTool')
 			this._selectedTool.setSelected(false);
 			this._selectedTool = null;
+			this._plugin.fireSelectEvent(null);
 			this._plugin.requestUpdate();
 		}
 	}

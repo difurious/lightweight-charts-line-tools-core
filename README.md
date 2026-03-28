@@ -202,6 +202,9 @@ Fires when a line tool is modified, moved, or finished being created. This is th
 #### `subscribeLineToolsDoubleClick(handler)`
 Fires when a user double-clicks an existing tool. Often used to open a custom "Properties" or "Settings" modal.
 
+#### `subscribeLineToolsSelect(handler)`
+Fires when a user single-clicks to select a line tool, or clicks empty space to deselect. The handler receives the selected tool's data, or `null` if all tools are deselected.
+
 ## Manual Crosshair Control
 
 #### `setCrossHairXY(x, y, visible)`
