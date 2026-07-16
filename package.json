@@ -1,6 +1,6 @@
 {
   "name": "lightweight-charts-line-tools-core",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "type": "module",
   "description": "Core plugin for converting line tools V3.8 build to Lightweight Charts v5+ plugin",
   "main": "dist/lightweight-charts-line-tools-core.umd.js",

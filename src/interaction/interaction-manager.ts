@@ -624,6 +624,9 @@ export class InteractionManager<HorzScaleItem> {
 		// Immediately reject any interaction if the chart is in read-only mode
 		if (this._locked) { return; }
 
+		// Synchronize the Shift key state using the native event
+		this._isShiftKeyDown = event.shiftKey;
+
 		const point = this._eventToPoint(event);
 		if (!point) { return; }
 
@@ -761,6 +764,9 @@ export class InteractionManager<HorzScaleItem> {
 
 		// Stop tracking mouse movements and ghost points if locked
 		if (this._locked) { return; }
+
+		// Synchronize the Shift key state using the native event
+		this._isShiftKeyDown = event.shiftKey;
 
 		const point = this._eventToPoint(event);
 		if (!point) { return; }
@@ -1081,6 +1087,9 @@ export class InteractionManager<HorzScaleItem> {
 		// Ignore mouse releases if the chart is locked
 		// (Any active gestures were already aborted when setLocked(true) was called)
 		if (this._locked) { return; }		
+
+		// Synchronize the Shift key state using the native event
+		this._isShiftKeyDown = event.shiftKey;
 
 		const point = this._eventToPoint(event);
 
@@ -1905,6 +1914,9 @@ export class InteractionManager<HorzScaleItem> {
 	 * @private
 	 */
 	private _handleMouseLeave(event: MouseEvent): void {
+		// Synchronize the Shift key state using the native event
+		this._isShiftKeyDown = event.shiftKey;
+
 		// Nullify the global point so the crosshair logic knows the mouse is gone
 		this._currentGlobalPoint = null;
 		
